@@ -44,10 +44,53 @@ public class EstudianteDAO {
         return estudiantes;
     }
 
+    // findById
+    public boolean buscarEstudiantePorId(Estudiante estudiante){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = getConexion();
+        String sql = "SELECT * FROM estudiante WHERE id_estudiante = ?";
+        try{
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, estudiante.getIdEstudiante());
+            rs = ps.executeQuery();
+            if(rs.next()){
+                estudiante.setNombre(rs.getString("nombre"));
+                estudiante.setApellido(rs.getString("apellido"));
+                estudiante.setTelefono(rs.getString("telefono"));
+                estudiante.setEmail(rs.getString("email"));
+                return true;
+            }
+        }catch(Exception e){
+            System.out.println("Ocurrio un error al buscar estudiante: " + e.getMessage());
+        }
+        finally{
+            try{
+                con.close();
+            }catch(Exception e){
+                System.out.println("Ocurrio un error al cerrar conexion" + e.getMessage());
+            }
+
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         var estudianteDao = new EstudianteDAO();
+        // Listar los estudiantes
         System.out.println("Listado de estudiantes: ");
         List<Estudiante> estudiantes = estudianteDao.listarEstudiantes();
-        estudiantes.forEach(System.out::println);
+        //estudiantes.forEach(System.out::println);
+
+        // Buscar por ID
+        var estudiante1 = new Estudiante(1);
+        System.out.println("estudiante antes de la busqueda: " + estudiante1);
+        var encontrado = estudianteDao.buscarEstudiantePorId(estudiante1);
+        if(encontrado){
+            System.out.println("estudiante encontrado: " + estudiante1);
+
+        }else{
+            System.out.println("No se encontro estudiante: " + estudiante1.getIdEstudiante());
+        }
     }
 }
