@@ -15,10 +15,10 @@ public class SistemaEstudiantesApp {
         var estudianteDAO = new EstudianteDAO();
         while(!salir){
             try {
-                mostraMenu();
-                //salir = ejecutarOpciones(consola, estudianteDao);
+                mostrarMenu();
+                salir = ejecutarOpciones(consola, estudianteDAO);
             }catch(Exception e){
-                System.out.println("Ocurrio un error al ejecutar operacion: " e.getMessage());
+                System.out.println("Ocurrio un error al ejecutar operacion: " + e.getMessage());
             }
             System.out.println();
         }
@@ -26,7 +26,7 @@ public class SistemaEstudiantesApp {
     }
 
     private static void mostrarMenu(){
-        System.out.println("""
+        System.out.print("""
                 *** Sistema de estudiantes ***
                 1. Listar estudiantes
                 2. Buscar estudiante
